@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Damaged Goods Collective — Commercial Developer Tools</title>
+  <link rel="canonical" href="https://thedamagedgoodsco.com/" />
   <style>
     :root {
       --bg: #070b14;
@@ -158,7 +159,7 @@
         <a href="#products">Products</a>
         <a href="#verify">Verify &amp; Licensing</a>
         <a id="nav-sponsors" href="https://github.com/sponsors/thedamagedgoodsco-max" target="_blank" rel="noopener">GitHub Sponsors</a>
-        <a id="nav-support" href="mailto:TheDamagedGoodsco@gmail.com">Support</a>
+        <a id="nav-support" href="mailto:support@thedamagedgoodsco.com">Support</a>
         <a id="nav-store" class="nav-cta" href="https://thedamagedgoodsco.gumroad.com" target="_blank" rel="noopener">Open Gumroad Store</a>
       </div>
     </div>
@@ -277,8 +278,8 @@
         </div>
         <div class="trust-item">
           <h4>3. Commercial Terms &amp; Support</h4>
-          <p>Proprietary Commercial License — <strong>The Damaged Goods Collective</strong> (Developer: <strong>Eddiebanxz / Eduardo J Lopez</strong>). Need renewals, seat upgrades, or Enterprise Order Forms?</p>
-          <code class="code-line mono">TheDamagedGoodsco@gmail.com</code>
+          <p>Proprietary Commercial License — <strong>The Damaged Goods Collective</strong> (Developer: <strong>Eddiebanxz / Eduardo J Lopez</strong>, <span class="mono">eddie.lopez7295@thedamagedgoodsco.com</span>). Need renewals, seat upgrades, or Enterprise Order Forms?</p>
+          <code id="support-email-code" class="code-line mono">support@thedamagedgoodsco.com</code>
         </div>
       </div>
     </section>
@@ -287,7 +288,8 @@
   <footer class="container">
     <span>&copy; 2026 The Damaged Goods Collective (THE DAMAGED GOODS COLLECTIVE . ORG) · Developer: Eddiebanxz (Eduardo J Lopez) · All Rights Reserved</span>
     <span>
-      <a id="foot-support" href="mailto:TheDamagedGoodsco@gmail.com">TheDamagedGoodsco@gmail.com</a> ·
+      <a id="foot-domain" href="https://thedamagedgoodsco.com" target="_blank" rel="noopener">thedamagedgoodsco.com</a> ·
+      <a id="foot-support" href="mailto:support@thedamagedgoodsco.com">support@thedamagedgoodsco.com</a> ·
       <a id="foot-gumroad" href="https://thedamagedgoodsco.gumroad.com" target="_blank" rel="noopener">Gumroad</a> ·
       <a id="foot-sponsors" href="https://github.com/sponsors/thedamagedgoodsco-max" target="_blank" rel="noopener">GitHub Sponsors</a>
     </span>
@@ -345,6 +347,25 @@
       if (cfg.githubSponsorsUrl) {
         document.getElementById('nav-sponsors').href = cfg.githubSponsorsUrl;
         document.getElementById('foot-sponsors').href = cfg.githubSponsorsUrl;
+      }
+      if (cfg.supportEmail) {
+        const mailHref = 'mailto:' + cfg.supportEmail;
+        const navSup = document.getElementById('nav-support');
+        const footSup = document.getElementById('foot-support');
+        const codeSup = document.getElementById('support-email-code');
+        if (navSup) navSup.href = mailHref;
+        if (footSup) {
+          footSup.href = mailHref;
+          footSup.textContent = cfg.supportEmail;
+        }
+        if (codeSup) codeSup.textContent = cfg.supportEmail;
+      }
+      if (cfg.siteUrl) {
+        const footDom = document.getElementById('foot-domain');
+        if (footDom) {
+          footDom.href = cfg.siteUrl;
+          footDom.textContent = cfg.domain || cfg.siteUrl.replace(/^https?:\/\//, '');
+        }
       }
     })();
   </script>
