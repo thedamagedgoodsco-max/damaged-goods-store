@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Damaged Goods Collective — Commercial Developer Tools</title>
+  <style>
+    :root {
+      --bg: #070b14;
+      --surface: #0f172a;
+      --surface-2: #162036;
+      --border: #26344d;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --mint: #2dd4bf;
+      --gold: #ffd166;
+      --coral: #ff6b4a;
+      --lav: #a78bfa;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top center, #15213d 0%, var(--bg) 52%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+      line-height: 1.55;
+    }
+    .mono { font-family: 'SF Mono', Menlo, Monaco, Consolas, monospace; }
+    a { color: inherit; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    nav {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(7, 11, 20, 0.82);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px; gap: 16px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -0.01em; text-decoration: none; }
+    .brand-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 12px var(--mint); }
+    .nav-links { display: flex; align-items: center; gap: 18px; font-size: 14px; font-weight: 600; color: var(--muted); }
+    .nav-links a { text-decoration: none; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      padding: 8px 14px; border-radius: 10px;
+      background: linear-gradient(90deg, var(--mint), #38bdf8);
+      color: #06101c !important; font-weight: 800; font-size: 13px;
+    }
+
+    /* Hero */
+    .hero { padding: 62px 0 42px; text-align: center; }
+    .eyebrow {
+      display: inline-block; padding: 5px 12px; border-radius: 999px;
+      border: 1px solid rgba(45, 212, 191, 0.4);
+      background: rgba(45, 212, 191, 0.1);
+      color: var(--mint); font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .hero h1 {
+      margin: 16px auto 12px; max-width: 820px;
+      font-size: clamp(32px, 5vw, 52px); line-height: 1.08; letter-spacing: -0.03em; font-weight: 900;
+    }
+    .hero p {
+      margin: 0 auto 26px; max-width: 680px; color: var(--muted); font-size: 17px;
+    }
+    .hero-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 20px; border-radius: 12px; font-weight: 800; font-size: 14px;
+      text-decoration: none; cursor: pointer; border: 1px solid transparent; transition: transform 0.12s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: linear-gradient(90deg, var(--mint), #38bdf8); color: #06101c; }
+    .btn-gold { background: var(--gold); color: #18181b; }
+    .btn-ghost { background: var(--surface); border-color: var(--border); color: var(--text); }
+
+    /* Products Grid */
+    .section-title { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 8px; }
+    .section-sub { margin: 0 0 26px; color: var(--muted); font-size: 15px; }
+    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 24px; margin-bottom: 48px; }
+    @media (max-width: 540px) { .products { grid-template-columns: 1fr; } .nav-links a:not(.nav-cta) { display: none; } }
+
+    .card {
+      background: linear-gradient(180deg, rgba(22, 32, 54, 0.9) 0%, var(--surface) 100%);
+      border: 1px solid var(--border); border-radius: 20px; padding: 24px;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 18px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    }
+    .cover-wrap {
+      border-radius: 14px; overflow: hidden; border: 1px solid var(--border); aspect-ratio: 16 / 9; background: #020617;
+    }
+    .cover-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .badge {
+      display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .badge-mint { background: rgba(45, 212, 191, 0.16); color: var(--mint); border: 1px solid rgba(45, 212, 191, 0.35); }
+    .badge-gold { background: rgba(255, 209, 102, 0.16); color: var(--gold); border: 1px solid rgba(255, 209, 102, 0.35); }
+    .card h3 { margin: 6px 0 4px; font-size: 22px; font-weight: 850; letter-spacing: -0.02em; }
+    .card-desc { margin: 0; color: var(--muted); font-size: 14px; }
+
+    /* Tier selector */
+    .tier-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .tier-btn {
+      padding: 10px 8px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--surface-2); color: var(--muted); font-weight: 700; font-size: 13px; cursor: pointer; text-align: center;
+    }
+    .tier-btn.active {
+      border-color: var(--mint); color: var(--text); background: rgba(45, 212, 191, 0.12);
+    }
+    .price-box {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+      padding: 14px 16px; border-radius: 12px; background: rgba(2, 6, 23, 0.65); border: 1px solid var(--border);
+    }
+    .price-val { font-size: 30px; font-weight: 900; letter-spacing: -0.03em; }
+    .price-scope { font-size: 13px; color: var(--muted); text-align: right; }
+
+    ul.feats { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; color: #cbd5e1; }
+    ul.feats li { padding-left: 20px; position: relative; }
+    ul.feats li::before { content: "✓"; position: absolute; left: 0; color: var(--mint); font-weight: 900; }
+
+    .card-footer { display: flex; flex-direction: column; gap: 10px; }
+    .sha-pill {
+      padding: 8px 10px; border-radius: 8px; background: #020617; border: 1px solid var(--border);
+      font-size: 11px; color: var(--muted); word-break: break-all;
+    }
+
+    /* Trust / Checksums */
+    .trust-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+      padding: 26px; margin-bottom: 48px;
+    }
+    .trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 16px; }
+    .trust-item h4 { margin: 0 0 6px; font-size: 15px; font-weight: 800; color: var(--gold); }
+    .trust-item p { margin: 0; font-size: 13.5px; color: var(--muted); }
+    .code-line {
+      display: block; margin-top: 8px; padding: 8px 10px; border-radius: 8px;
+      background: #020617; border: 1px solid var(--border); font-size: 12px; color: var(--mint); overflow-x: auto;
+    }
+
+    footer {
+      border-top: 1px solid var(--border); padding: 28px 0 42px; color: var(--muted); font-size: 13px;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    footer a { color: var(--text); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container nav-inner">
+      <a class="brand" href="#top"><span class="brand-dot"></span><span>The Damaged Goods Collective</span></a>
+      <div class="nav-links">
+        <a href="#products">Products</a>
+        <a href="#verify">Verify &amp; Licensing</a>
+        <a id="nav-sponsors" href="https://github.com/sponsors/thedamagedgoodsco-max" target="_blank" rel="noopener">GitHub Sponsors</a>
+        <a id="nav-support" href="mailto:TheDamagedGoodsco@gmail.com">Support</a>
+        <a id="nav-store" class="nav-cta" href="https://thedamagedgoodsco.gumroad.com" target="_blank" rel="noopener">Open Gumroad Store</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top" class="container">
+    <section class="hero">
+      <span class="eyebrow">THE DAMAGED GOODS COLLECTIVE . ORG · Developer: Eddiebanxz (Eduardo J Lopez)</span>
+      <h1>Zero-Bloat Commercial Tools for AI Builders &amp; Terminal Workflows.</h1>
+      <p>Locally hosted, cryptographically licensed, and SHA-256 verified developer tools built without subscription lock-in or telemetry bloat.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#products">Browse Products</a>
+        <a class="btn btn-gold" href="#atc-card">Agentic Team Console — From $29</a>
+        <a class="btn btn-ghost" href="#wfv-card">workflowvideo CLI — $0.99</a>
+      </div>
+    </section>
+
+    <section id="products">
+      <h2 class="section-title">Commercial Software Catalog</h2>
+      <p class="section-sub">Instant digital archive delivery via Gumroad checkout + SHA-256 verification. Proprietary Commercial Licenses included.</p>
+
+      <div class="products">
+        <!-- Agentic Team Console -->
+        <article id="atc-card" class="card">
+          <div>
+            <div class="cover-wrap">
+              <img src="./assets/agentic-team-console.png" alt="Agentic Team Console v1.2.0 Cover" />
+            </div>
+            <div class="card-top" style="margin-top: 16px;">
+              <div>
+                <span class="badge badge-mint">v1.2.0 · Node.js &ge; 18 · Zero Deps</span>
+                <h3>Agentic Team Console</h3>
+                <p class="card-desc">6-Agent Mission Control, 60fps SSE Fleet Radar, Kanban &amp; Shared Memory Bank.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="tier-tabs" role="tablist" aria-label="Agentic Team Console pricing tiers">
+            <button type="button" class="tier-btn active" data-tier="solo">Solo · $29</button>
+            <button type="button" class="tier-btn" data-tier="team">Team · $99</button>
+            <button type="button" class="tier-btn" data-tier="enterprise">Enterprise · $299</button>
+          </div>
+
+          <div class="price-box">
+            <div>
+              <div id="atc-price" class="price-val">$29</div>
+              <div id="atc-term" style="font-size:12px;color:var(--muted);">Annual license (--days 365)</div>
+            </div>
+            <div id="atc-scope" class="price-scope">1 developer workstation<br/>Ed25519 key + Antigravity plugin</div>
+          </div>
+
+          <ul class="feats">
+            <li>Coordinate <span class="mono">@coordinator</span>, <span class="mono">@researcher</span>, <span class="mono">@architect</span>, <span class="mono">@engineer</span>, <span class="mono">@reviewer</span> &amp; <span class="mono">@devops</span> in one workspace.</li>
+            <li>Google OAuth 2.0 + PKCE (<span class="mono">S256</span>) sign-in alongside salted <span class="mono">scrypt</span> password auth.</li>
+            <li>Dual-mode <span class="mono">agent-cli.js</span> (<span class="mono">status</span>, <span class="mono">message</span>, <span class="mono">task</span>, <span class="mono">memory</span>, <span class="mono">dispatch</span>).</li>
+            <li>Portable Antigravity plugin installer (<span class="mono">./install-plugin.sh</span>) + Ed25519 license gate.</li>
+          </ul>
+
+          <div class="card-footer">
+            <a id="atc-buy" class="btn btn-primary" href="https://thedamagedgoodsco.gumroad.com/l/agentic-team-console?variant=Solo" target="_blank" rel="noopener">Buy Solo License ($29)</a>
+            <div class="sha-pill mono"><strong>SHA-256 (v1.2.0 .zip):</strong> f983987262fdfcf5434b9945052602003d60533b0ea12db17b65822e4c2aba01</div>
+          </div>
+        </article>
+
+        <!-- workflowvideo CLI -->
+        <article id="wfv-card" class="card">
+          <div>
+            <div class="cover-wrap">
+              <img src="./assets/workflowvideo-cli.png" alt="workflowvideo CLI v1.0.0 Cover" />
+            </div>
+            <div class="card-top" style="margin-top: 16px;">
+              <div>
+                <span class="badge badge-gold">v1.0.0 · macOS · VideoToolbox</span>
+                <h3>workflowvideo CLI</h3>
+                <p class="card-desc">One-command hardware-accelerated screen workflow recorder + Claude Code <span class="mono">/workflowvideo</span>.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="price-box">
+            <div>
+              <div class="price-val">$0.99</div>
+              <div style="font-size:12px;color:var(--muted);">One-time purchase</div>
+            </div>
+            <div class="price-scope">Single-user commercial license<br/>Instant archive download</div>
+          </div>
+
+          <ul class="feats">
+            <li>Toggle recording with <span class="mono">workflowvideo</span> or <span class="mono">/workflowvideo</span> inside Claude Code.</li>
+            <li>Apple Silicon / macOS <span class="mono">h264_videotoolbox</span> MP4 capture (<span class="mono">+faststart</span>, cursor &amp; click capture).</li>
+            <li>5-second fail-fast guard detects missing macOS Screen Recording permissions early.</li>
+            <li>Includes automated <span class="mono">./install.sh</span> installer and zero network telemetry.</li>
+          </ul>
+
+          <div class="card-footer">
+            <a id="wfv-buy" class="btn btn-gold" href="https://thedamagedgoodsco.gumroad.com/l/workflowvideo-cli" target="_blank" rel="noopener">Buy workflowvideo CLI ($0.99)</a>
+            <div class="sha-pill mono"><strong>SHA-256 (v1.0.0 .zip):</strong> e317a969e2dea0f96b60390626977e88ce92e44228d4d8a8abadcf8512bf7ee6</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="verify" class="trust-card">
+      <h2 class="section-title">Cryptographic Integrity &amp; Commercial Licensing</h2>
+      <p class="section-sub">Every release archive is reproducible, audited, and signed/checksummed prior to storefront upload.</p>
+      <div class="trust-grid">
+        <div class="trust-item">
+          <h4>1. Verify Archive Integrity</h4>
+          <p>Check your downloaded <span class="mono">.zip</span> against the published <span class="mono">SHA256SUMS.txt</span> before installing:</p>
+          <code class="code-line mono">shasum -a 256 -c SHA256SUMS.txt</code>
+        </div>
+        <div class="trust-item">
+          <h4>2. Activate Ed25519 License Key</h4>
+          <p>For Agentic Team Console, save your issued <span class="mono">ATC1...</span> key or export <span class="mono">ATC_LICENSE</span>:</p>
+          <code class="code-line mono">printf '%s\n' 'ATC1.&lt;key&gt;' &gt; data/license.key &amp;&amp; npm start</code>
+        </div>
+        <div class="trust-item">
+          <h4>3. Commercial Terms &amp; Support</h4>
+          <p>Proprietary Commercial License — <strong>The Damaged Goods Collective</strong> (Developer: <strong>Eddiebanxz / Eduardo J Lopez</strong>). Need renewals, seat upgrades, or Enterprise Order Forms?</p>
+          <code class="code-line mono">TheDamagedGoodsco@gmail.com</code>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <span>&copy; 2026 The Damaged Goods Collective (THE DAMAGED GOODS COLLECTIVE . ORG) · Developer: Eddiebanxz (Eduardo J Lopez) · All Rights Reserved</span>
+    <span>
+      <a id="foot-support" href="mailto:TheDamagedGoodsco@gmail.com">TheDamagedGoodsco@gmail.com</a> ·
+      <a id="foot-gumroad" href="https://thedamagedgoodsco.gumroad.com" target="_blank" rel="noopener">Gumroad</a> ·
+      <a id="foot-sponsors" href="https://github.com/sponsors/thedamagedgoodsco-max" target="_blank" rel="noopener">GitHub Sponsors</a>
+    </span>
+  </footer>
+
+  <script src="./store-config.js"></script>
+  <script>
+    (function () {
+      const cfg = window.DG_STORE_CONFIG || {};
+      const atc = (cfg.products && cfg.products.agenticTeamConsole) || {};
+      const wfv = (cfg.products && cfg.products.workflowvideo) || {};
+      const tiers = {
+        solo: {
+          price: '$29',
+          term: 'Annual license (--days 365)',
+          scope: '1 developer workstation<br/>Ed25519 key + Antigravity plugin',
+          cta: 'Buy Solo License ($29)',
+          url: atc.soloUrl || '#'
+        },
+        team: {
+          price: '$99',
+          term: 'Annual team license (--days 365)',
+          scope: 'Up to 10 internal team seats<br/>Google OAuth + partner bundle',
+          cta: 'Buy Team License ($99)',
+          url: atc.teamUrl || '#'
+        },
+        enterprise: {
+          price: '$299',
+          term: 'Custom Order Form / Multi-Year',
+          scope: 'Unlimited internal seats<br/>Direct support &amp; custom jurisdiction',
+          cta: 'Request Enterprise License ($299)',
+          url: atc.enterpriseUrl || '#'
+        }
+      };
+
+      const buyBtn = document.getElementById('atc-buy');
+      document.querySelectorAll('.tier-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('.tier-btn').forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          const t = tiers[btn.dataset.tier] || tiers.solo;
+          document.getElementById('atc-price').textContent = t.price;
+          document.getElementById('atc-term').textContent = t.term;
+          document.getElementById('atc-scope').innerHTML = t.scope;
+          buyBtn.textContent = t.cta;
+          buyBtn.href = t.url;
+        });
+      });
+
+      if (wfv.buyUrl) document.getElementById('wfv-buy').href = wfv.buyUrl;
+      if (cfg.gumroadProfileUrl) {
+        document.getElementById('nav-store').href = cfg.gumroadProfileUrl;
+        document.getElementById('foot-gumroad').href = cfg.gumroadProfileUrl;
+      }
+      if (cfg.githubSponsorsUrl) {
+        document.getElementById('nav-sponsors').href = cfg.githubSponsorsUrl;
+        document.getElementById('foot-sponsors').href = cfg.githubSponsorsUrl;
+      }
+    })();
+  </script>
+</body>
+</html>

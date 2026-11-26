@@ -1,0 +1,8 @@
+.DS_Store
+.env
+.env.*
+client_secret*.json
+*google-oauth*.json
+owner-keys/
+*.pem
+*.key
